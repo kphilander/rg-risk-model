@@ -1,0 +1,16 @@
+# Netlify build configuration — RG Risk Model is a Vite single-page app
+# that runs entirely client-side (no server, no secrets required to build).
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Single-page app fallback: BrowserRouter deep links (e.g. /players/:id, /games,
+# /model) must serve index.html rather than 404 on direct navigation / refresh.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

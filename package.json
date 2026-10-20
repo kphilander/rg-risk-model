@@ -1,0 +1,36 @@
+{
+  "name": "rg-risk-model",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "White-label player-protection and responsible-gambling risk dashboard. Synthetic data only.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --noEmit",
+    "build:portable": "vite build --config vite.portable.config.ts && node -e \"require('fs').renameSync('dist-portable/index.html','dist-portable/rg-risk-model.html')\""
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.1.1",
+    "@fontsource/ibm-plex-sans": "^5.1.1",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.439.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "recharts": "^2.12.7",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.6",
+    "vite-plugin-singlefile": "^2.3.3"
+  }
+}

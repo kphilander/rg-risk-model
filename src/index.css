@@ -1,0 +1,456 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Design language: "research instrument".
+   Warm paper ground, flat hairline-ruled panels, one ink-teal accent for
+   interaction, an ordinal severity ramp for risk, and IBM Plex (sans for
+   text, mono for figures). No glows, gradients, lifts, or scroll animation.
+   Fonts are bundled (src/main.tsx) — the app still makes no network requests.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --font-heading: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* ---- Neutrals: warm paper + ink ---- */
+  --bg: #f3f2ed;
+  --surface: #fcfbf8;
+  --surface-2: #f2f0ea;
+  --line: #e0ddd3;
+  --hair-strong: #c9c5b8;
+  --text: #16191f;
+  --text-2: #4b5059;
+  --text-3: #7a7e86;
+
+  /* ---- Accent: ink teal, used only for interactive elements ---- */
+  --accent: #0f6b60;
+  --accent-ink: #0a4d45;
+  --accent-weak: #e4ece8;
+  --on-accent: #ffffff;
+
+  /* ---- Radii: tight ---- */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+
+  /* ---- Chrome ---- */
+  --glass-bg: var(--bg);
+  --glass-border: var(--line);
+
+  /* ---- Elevation: only for floating layers (popovers, drawer, modal) ---- */
+  --shadow-card: none;
+  --shadow-pop: 0 1px 2px rgba(22, 25, 31, 0.06), 0 8px 24px -10px rgba(22, 25, 31, 0.22);
+  --shadow-row: none;
+  --focus: 0 0 0 2px var(--surface), 0 0 0 4px color-mix(in srgb, var(--accent) 55%, transparent);
+
+  /* ---- Motion: functional only ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: var(--ease-out);
+  --dur-fast: 120ms;
+  --dur-med: 160ms;
+
+  --measure: 72ch;
+  --sidebar-w: 240px;
+  --topbar-h: 56px;
+
+  /* ---- Semantic status (tier) colors ---- */
+  --tier-progress-text: #5b6068;
+  --tier-progress-bg: #ebe9e2;
+  --tier-standard-text: #0f6b60;
+  --tier-standard-bg: #e4ece8;
+  --tier-distinction-text: #a8481c;
+  --tier-distinction-bg: #f4e6dc;
+
+  /* ---- Logo ---- */
+  --logo-ink: #16191f;
+  --logo-play: #00d4aa;
+  --logo-accent: #0f6b60;
+
+  /* ---- Legacy aliases (components read these names) ---- */
+  --surface-3: #e4e1d8;
+  --segment-active: var(--surface);
+  --border: var(--line);
+  --border-strong: var(--hair-strong);
+  --hairline: var(--line);
+  --text-soft: var(--text-2);
+  --text-faint: var(--text-3);
+  --brand: var(--accent);
+  --brand-strong: var(--accent-ink);
+  --brand-tint: var(--accent-weak);
+  --teal: var(--accent);
+  --teal-2: color-mix(in srgb, var(--accent) 70%, white);
+  --grid: rgba(22, 25, 31, 0.07);
+  --material: var(--bg);
+  --lit-edge: none;
+  --shadow: none;
+  --radius-card: var(--radius-lg);
+  --radius-field: var(--radius-md);
+  --ease: var(--ease-out);
+  --spring: var(--ease-out);
+}
+
+.dark {
+  --bg: #121418;
+  --surface: #191c21;
+  --surface-2: #22262c;
+  --line: #2d3238;
+  --hair-strong: #3d434a;
+  --text: #ecebe6;
+  --text-2: #a9adb3;
+  --text-3: #7f848b;
+
+  --accent: #4fb3a3;
+  --accent-ink: #8fd2c6;
+  --accent-weak: #18302c;
+  --on-accent: #0b1f1c;
+
+  --glass-bg: var(--bg);
+  --glass-border: var(--line);
+  --shadow-pop: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 30px -12px rgba(0, 0, 0, 0.7);
+
+  --tier-progress-text: #a9adb3;
+  --tier-progress-bg: #262a30;
+  --tier-standard-text: #4fb3a3;
+  --tier-standard-bg: #18302c;
+  --tier-distinction-text: #e08a5c;
+  --tier-distinction-bg: #3a2418;
+
+  --logo-ink: #ecebe6;
+  --logo-accent: #4fb3a3;
+
+  --surface-3: #2b3036;
+  --segment-active: #2b3036;
+  --grid: rgba(255, 255, 255, 0.07);
+  --material: var(--bg);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  letter-spacing: 0;
+}
+
+/* Figures: monospaced, tabular — the instrument voice. */
+.tabular-nums,
+.stat-num,
+.hero-num {
+  font-variant-numeric: tabular-nums;
+}
+
+@layer components {
+  .card {
+    @apply p-5;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+
+  .card-flush {
+    @apply overflow-hidden;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Interactive panels: a border change, no movement. */
+  .lift,
+  .card-hover {
+    transition: border-color var(--dur-fast), background var(--dur-fast);
+  }
+  .lift:hover,
+  .card-hover:hover {
+    border-color: var(--hair-strong);
+  }
+
+  /* Page header block (no panel) for pages whose title row carries controls. */
+  .page-head {
+    padding: 2px 0 6px;
+  }
+
+  /* Former hero wash — now a plain panel. */
+  .hero-glow {
+    position: relative;
+    background: var(--surface);
+  }
+
+  /* Bar fills — solid accent. */
+  .gradient-cool {
+    background: var(--accent);
+  }
+  /* Former gradient text — plain ink. */
+  .gradient-text {
+    color: var(--text);
+  }
+
+  .surface-2 {
+    background: var(--surface-2);
+  }
+
+  .text-soft {
+    color: var(--text-2);
+  }
+  .text-faint {
+    color: var(--text-3);
+  }
+
+  /* Small label — sentence case, not tracked caps. */
+  .eyebrow {
+    @apply text-[12px] font-medium;
+    color: var(--text-3);
+    letter-spacing: 0;
+  }
+
+  .section-title {
+    @apply text-[15px] font-semibold;
+    color: var(--text);
+    letter-spacing: -0.005em;
+  }
+  .section-sub {
+    @apply text-[12.5px] mt-0.5;
+    color: var(--text-3);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-[13px] font-medium disabled:opacity-40 disabled:cursor-not-allowed;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    transition: background var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast);
+  }
+  .btn:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+    outline-offset: 2px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .btn-primary:hover {
+    background: var(--accent-ink);
+  }
+  .dark .btn-primary:hover {
+    background: var(--accent-ink);
+  }
+  .btn-ghost {
+    border-color: var(--line);
+    background: var(--surface);
+    color: var(--text);
+  }
+  .btn-ghost:hover {
+    border-color: var(--hair-strong);
+    background: var(--surface-2);
+  }
+
+  .input {
+    @apply w-full px-3 py-2 text-[13.5px] outline-none;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    transition: border-color var(--dur-fast);
+  }
+  .input::placeholder {
+    color: var(--text-3);
+  }
+  .input:hover {
+    border-color: var(--hair-strong);
+  }
+  .input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2 py-0.5 text-[12px] font-medium;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--text-2);
+  }
+
+  .nav-link {
+    @apply relative flex items-center gap-2.5 px-3 py-[7px] text-[13.5px] font-medium;
+    border-radius: var(--radius-md);
+    color: var(--text-2);
+    transition: background var(--dur-fast), color var(--dur-fast);
+  }
+  .nav-link svg {
+    width: 16px;
+    height: 16px;
+    color: var(--text-3);
+  }
+  .nav-link:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  /* Selected: surface + accent rule on the left edge. */
+  .nav-link-active,
+  .nav-link-active:hover {
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 600;
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .nav-link-active::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 7px;
+    bottom: 7px;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .nav-link-active svg {
+    color: var(--accent);
+  }
+
+  .stat-num {
+    @apply text-[24px] font-medium leading-none;
+    font-family: var(--font-mono);
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .hero-num {
+    @apply text-[36px] font-medium leading-none;
+    font-family: var(--font-mono);
+    letter-spacing: -0.03em;
+  }
+
+  .material-bar {
+    background: var(--bg);
+  }
+
+  .segmented {
+    @apply inline-flex gap-0 p-0;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .segmented-btn {
+    @apply px-3 py-1.5 text-[12.5px] font-medium;
+    color: var(--text-2);
+    transition: background var(--dur-fast), color var(--dur-fast);
+  }
+  .segmented-btn + .segmented-btn {
+    border-left: 1px solid var(--line);
+  }
+  .segmented-btn:hover {
+    color: var(--text);
+  }
+  .segmented-btn-active {
+    background: var(--surface-2);
+    color: var(--text);
+    font-weight: 600;
+  }
+  .dark .segmented-btn-active {
+    background: var(--surface-3);
+    color: var(--text);
+  }
+
+  .large-title {
+    @apply text-[22px] font-semibold;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .prose {
+    max-width: var(--measure);
+  }
+
+  /* KPI summary strip: one ruled panel, cells divided by hairlines. */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .kpi-strip > * {
+    border-radius: 0 !important;
+    border: 0 !important;
+    box-shadow: inset 1px 0 0 var(--line), inset 0 1px 0 var(--line);
+    margin: -1px 0 0 -1px;
+  }
+  @media (min-width: 1024px) {
+    .kpi-strip {
+      grid-template-columns: repeat(var(--kpi-cols, 4), minmax(0, 1fr));
+    }
+  }
+}
+
+/* .reveal is kept as a no-op hook (no scroll animation). */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+}
+@keyframes drawerIn {
+  from {
+    transform: translateX(-100%);
+  }
+}
+.drawer-in {
+  animation: drawerIn 160ms var(--ease-out);
+}
+.popover-in {
+  animation: popIn 100ms var(--ease-out);
+  transform-origin: top center;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.recharts-surface:focus {
+  outline: none;
+}
+.recharts-text {
+  font-family: var(--font-mono);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--hair-strong);
+  border: 3px solid var(--bg);
+  border-radius: 999px;
+}

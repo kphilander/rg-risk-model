@@ -1,0 +1,77 @@
+{
+  "version": "reference-hazard-2026.07",
+  "provenance": "reference-fit",
+  "design": "Weighted mean of 0–100 behavioural markers → calibrated harm probability. Weights blend a non-negative (monotonic) multivariate logistic (redundancy-aware) with univariate discrimination (so no literature-grounded marker is zeroed), fit on first-90-active-day markers → later RG-coded account closure (leakage-aware, prospective). Probability layer v2: discrete-time hazard on the index (piecewise baseline over months 1-3/4-6/7-12/13-24/25-36), reported as p(harm within 12 months).",
+  "fittedOn": {
+    "cohort": "Research cohort (online bettors; not distributed)",
+    "prevalence": 0.0479
+  },
+  "markerWeights": {
+    "play-frequency": 0.255,
+    "tolerance-for-loss": 2.775,
+    "deposit-volatility": 0.292,
+    "increasing-bets": 0.215,
+    "faster-games": 0.25,
+    "chasing-losses": 0.813,
+    "deposit-escalation": 1.642,
+    "impulsive-transactions": 2.232,
+    "payment-switching": 0.459,
+    "loss-of-winnings": 1.065,
+    "longer-sessions": 0.636,
+    "late-night-play": 0.636,
+    "inability-to-stop": 0.636
+  },
+  "markersFitted": [
+    "play-frequency",
+    "tolerance-for-loss",
+    "deposit-volatility",
+    "increasing-bets",
+    "faster-games",
+    "chasing-losses",
+    "deposit-escalation",
+    "impulsive-transactions",
+    "payment-switching",
+    "loss-of-winnings"
+  ],
+  "markersPrior": [
+    "longer-sessions",
+    "late-night-play",
+    "inability-to-stop"
+  ],
+  "calibration": {
+    "type": "hazard",
+    "horizonMonths": 12,
+    "pieceUpperBoundsMonths": [
+      3,
+      6,
+      12,
+      24,
+      36
+    ],
+    "alphas": [
+      -9.02985,
+      -8.71869,
+      -8.61035,
+      -9.76783,
+      -10.12134
+    ],
+    "beta": 4.50266,
+    "note": "Discrete-time hazard: h(month j|S) = sigmoid(alpha_piece(j) + beta*S/100); p(harm within H months) = 1 - prod(1-h). Events = RG-coded closure after the feature window; censoring at dataset end or 36 months."
+  },
+  "metrics": {
+    "rocAuc": 0.673,
+    "prAuc": 0.1093,
+    "prBaseline": 0.0479,
+    "multivariateCeilingAuc": 0.6876,
+    "brier": 0.0445,
+    "ece": 0.0042,
+    "prevalence": 0.0479,
+    "horizonMonths": 12,
+    "aucAt12m": 0.711,
+    "prAucAt12m": 0.0709,
+    "brierAt12m": 0.0226,
+    "eceAt12m": 0.0034,
+    "baseRateAtHorizon": 0.024
+  },
+  "caveat": "Self-exclusion is an under-ascertained proxy (Catania 2021): tuned for recall, false positives expected. Three markers are literature priors (no analog in the fitting data). The calibration is fit on offline marker proxies; operators re-fit it exactly in-browser on their scored population."
+}
